@@ -6,7 +6,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from groq import Groq
 
 # Set up Groq API key
-os.environ["GROQ_API_KEY"] = "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"  # Replace with your actual API key
+os.environ["GROQ_API_KEY"] = "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" # Replace with your actual API key
 api_key = os.getenv("GROQ_API_KEY")
 if not api_key:
     raise EnvironmentError("GROQ_API_KEY environment variable is not set.")
@@ -38,26 +38,9 @@ def generate_questions(text, number, grade, tone):
             model="llama3-8b-8192"
         )
         generated_text = response.choices[0].message.content
-        
-        # Format the questions to add spacing between options
-        formatted_text = format_mcq_output(generated_text)
-        return formatted_text
+        return generated_text
     except Exception as e:
         return f"An error occurred: {e}"
-
-# Function to format the generated questions with spaced options
-def format_mcq_output(generated_text):
-    lines = generated_text.strip().split('\n')
-    formatted_lines = []
-
-    for line in lines:
-        if line.startswith(('Easy', 'Medium', 'Hard')):
-            formatted_lines.append(f"\n**{line}**")  # Format difficulty level
-        else:
-            # Add line breaks for options
-            formatted_lines.append(line.replace('A)', '\nA) ').replace('B)', '\nB) ').replace('C)', '\nC) ').replace('D)', '\nD) '))
-    
-    return '\n'.join(formatted_lines)
 
 # Function to parse a PDF file and extract text
 def parse_pdf(file):
